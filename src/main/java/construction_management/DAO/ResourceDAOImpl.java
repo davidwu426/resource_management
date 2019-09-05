@@ -1,16 +1,18 @@
 package construction_management.DAO;
 
-import org.hibernate.SessionFactory;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import construction_management.Entity.Resource;
 import construction_management.Entity.User;
 
+
 @Repository
-public class UserDAOImpl implements UserDAO {
-	
+public class ResourceDAOImpl implements ResourceDAO{
+
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -18,22 +20,20 @@ public class UserDAOImpl implements UserDAO {
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-
-	public User getUser(int userId) {
+	
+	public Resource getResource(String id) {
 		Session session = this.sessionFactory.openSession();
-		User result = (User)session.createQuery("from Users where userId = ${userId}").getSingleResult();
+		Resource result = (Resource)session.createQuery("from Resources where resourceId="+id).getSingleResult();
 		session.close();
 		return result;
 	}
 
-	public void makeNewUser(User user) {
+	public void addResource(Resource res) {
 		Session session = this.sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
-		session.persist(user);
-		tx.commit();
+		Transaction trans = session.beginTransaction();
+		session.persist(res);
+		trans.commit();
 		session.close();
-		
 	}
-	
 
 }
